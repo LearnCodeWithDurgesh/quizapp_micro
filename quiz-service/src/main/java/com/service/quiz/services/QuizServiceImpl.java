@@ -3,6 +3,8 @@ package com.service.quiz.services;
 import com.service.quiz.entities.Quiz;
 import com.service.quiz.external.QuestionsFeignService;
 import com.service.quiz.repositories.QuizRepo;
+import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,15 +30,30 @@ public class QuizServiceImpl implements QuizService {
     }
 
     @Override
+    @CircuitBreaker(name = "BACKEND", fallbackMethod = "allFallbackMethod")
     public List<Quiz> getAllQuizzes() {
-
         List<Quiz> all = quizRepository.findAll();
-
         return all.stream().map(quiz -> {
             quiz.setQuestionDTOList(questionsFeignService.getQuestionsOfQuiz(quiz.getQuizId()));
             return quiz;
         }).collect(Collectors.toList());
 
+    }
+
+    //call when question service fails
+
+    public List<Quiz> allFallbackMethod(Exception ex) {
+        System.out.println("Fallback method executed");
+        return List.of(
+                Quiz.builder()
+                        .quizId(14)
+                        .quizTitle("Fallback Quiz")
+                        .quizDescription("This is fallback quiz created for working when question service is down")
+                        .maxMarks("0")
+                        .duration("0")
+                        .questions("0")
+                        .build()
+        );
     }
 
     @Override
@@ -64,5 +81,10 @@ public class QuizServiceImpl implements QuizService {
         } else {
             throw new IllegalArgumentException("Quiz not found with ID: " + quizId);
         }
+    }
+
+    @Override
+    public List<Quiz> searchQuiz(String title) {
+        return quizRepository.searchQuery(title);
     }
 }

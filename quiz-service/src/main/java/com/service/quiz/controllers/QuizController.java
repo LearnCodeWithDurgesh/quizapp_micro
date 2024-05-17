@@ -3,6 +3,7 @@ package com.service.quiz.controllers;
 
 import com.service.quiz.entities.Quiz;
 import com.service.quiz.services.QuizService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,16 +24,18 @@ public class QuizController {
     }
 
     @PostMapping
-    public ResponseEntity<Quiz> createQuiz(@RequestBody Quiz quiz) {
+    public ResponseEntity<Quiz> createQuiz(@Valid @RequestBody Quiz quiz) {
         Quiz savedQuiz = quizService.saveQuiz(quiz);
         return new ResponseEntity<>(savedQuiz, HttpStatus.CREATED);
     }
 
     @GetMapping
+
     public ResponseEntity<List<Quiz>> getAllQuizzes() {
         List<Quiz> quizzes = quizService.getAllQuizzes();
         return new ResponseEntity<>(quizzes, HttpStatus.OK);
     }
+
 
     @GetMapping("/{quizId}")
     public ResponseEntity<Quiz> getQuizById(@PathVariable Integer quizId) {
@@ -51,6 +54,11 @@ public class QuizController {
     public ResponseEntity<Quiz> updateQuiz(@PathVariable Integer quizId, @RequestBody Quiz updatedQuiz) {
         Quiz quiz = quizService.updateQuiz(quizId, updatedQuiz);
         return new ResponseEntity<>(quiz, HttpStatus.OK);
+    }
+
+    @GetMapping("/search/{keyword}")
+    public ResponseEntity<List<Quiz>> updateQuiz(@PathVariable String keyword) {
+        return new ResponseEntity<>(quizService.searchQuiz(keyword), HttpStatus.OK);
     }
 
 }

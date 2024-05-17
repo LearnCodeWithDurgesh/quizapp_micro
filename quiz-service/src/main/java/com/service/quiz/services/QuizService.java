@@ -16,4 +16,6 @@ public interface QuizService {
     void deleteQuiz(Integer quizId);
 
     Quiz updateQuiz(Integer quizId, Quiz updatedQuiz);
+
+    List<Quiz> searchQuiz(String title);
 }
