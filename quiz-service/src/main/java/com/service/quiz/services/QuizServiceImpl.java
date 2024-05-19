@@ -35,6 +35,8 @@ public class QuizServiceImpl implements QuizService {
     public List<Quiz> getAllQuizzes() {
         List<Quiz> all = quizRepository.findAll();
         return all.stream().map(quiz -> {
+            //calling question service to get the questions of the quiz
+            //setting questionDTOList to quiz
             quiz.setQuestionDTOList(questionsFeignService.getQuestionsOfQuiz(quiz.getQuizId()));
             return quiz;
         }).collect(Collectors.toList());
@@ -61,7 +63,9 @@ public class QuizServiceImpl implements QuizService {
     @Override
     public Optional<Quiz> getQuizById(Integer quizId) {
         Quiz quiz = quizRepository.findById(quizId).orElseThrow(() -> new RuntimeException("Quiz not found !!"));
+       // getting questions list from question service
         List<QuestionDTO> questionsOfQuiz = questionsFeignService.getQuestionsOfQuiz(quiz.getQuizId());
+       //setting questions to quiz
         quiz.setQuestionDTOList(questionsOfQuiz);
         return Optional.of(quiz);
 
@@ -85,7 +89,7 @@ public class QuizServiceImpl implements QuizService {
             // Set other properties as needed
             return quizRepository.save(quiz);
         } else {
-            throw new IllegalArgumentException("Quiz not found with ID: " + quizId);
+            throw new RuntimeException("Quiz not found with ID: " + quizId);
         }
     }
 
