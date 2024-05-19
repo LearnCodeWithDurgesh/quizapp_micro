@@ -15,12 +15,12 @@ data jpa, ✅
 custom query @query, caching, ✅
 profiles,✅
 feign client, ✅
-ribbon, ✅
+ribbon,load balancing using eureka service registry ✅
 hystrix, resilience4j✅
 cloud config server,
 actuator, ✅
 zipkin, ✅
 Apache Kafka, 
 graph ql,
-security using oauth 2,
+security using oauth 2,✅ with authentication keycloak
 custom centralized exception. ✅

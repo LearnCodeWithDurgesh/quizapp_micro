@@ -17,6 +17,25 @@ spring:
           uri: lb://QUESTIONS-SERVICE
           predicates:
             - Path=/api/questions/**
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8079/realms/apps
+      client:
+        registration:
+          keycloak:
+            client-id: quiz-microservices-app
+            client-secret: tj06nGMzictoLszePyVMqYNaaU60hm24
+            authorization-grant-type: authorization_code
+            scope:
+              - openid
+              - email
+              - profile
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8079/realms/apps
+
 
 
 server:
@@ -34,4 +53,13 @@ management:
   endpoint:
     health:
       show-details: always
+
+
+
+
+  tracing:
+    sampling:
+      probability: 1.0
+
+
 

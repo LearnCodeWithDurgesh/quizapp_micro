@@ -1,5 +1,6 @@
 package com.service.quiz.services;
 
+import com.service.quiz.dto.QuestionDTO;
 import com.service.quiz.entities.Quiz;
 import com.service.quiz.external.QuestionsFeignService;
 import com.service.quiz.repositories.QuizRepo;
@@ -43,6 +44,7 @@ public class QuizServiceImpl implements QuizService {
     //call when question service fails
 
     public List<Quiz> allFallbackMethod(Exception ex) {
+        ex.printStackTrace();
         System.out.println("Fallback method executed");
         return List.of(
                 Quiz.builder()
@@ -58,7 +60,11 @@ public class QuizServiceImpl implements QuizService {
 
     @Override
     public Optional<Quiz> getQuizById(Integer quizId) {
-        return quizRepository.findById(quizId);
+        Quiz quiz = quizRepository.findById(quizId).orElseThrow(() -> new RuntimeException("Quiz not found !!"));
+        List<QuestionDTO> questionsOfQuiz = questionsFeignService.getQuestionsOfQuiz(quiz.getQuizId());
+        quiz.setQuestionDTOList(questionsOfQuiz);
+        return Optional.of(quiz);
+
     }
 
     @Override
