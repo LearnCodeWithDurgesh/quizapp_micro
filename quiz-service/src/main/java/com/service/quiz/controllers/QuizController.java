@@ -1,7 +1,9 @@
 package com.service.quiz.controllers;
 
 
+import com.service.quiz.dto.QuizEvent;
 import com.service.quiz.entities.Quiz;
+import com.service.quiz.kafka.QuizProducer;
 import com.service.quiz.services.QuizService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -18,14 +20,22 @@ public class QuizController {
 
     private final QuizService quizService;
 
+    private QuizProducer producer;
 
-    public QuizController(QuizService quizService) {
+
+    public QuizController(QuizService quizService, QuizProducer producer) {
         this.quizService = quizService;
+        this.producer = producer;
     }
 
     @PostMapping
     public ResponseEntity<Quiz> createQuiz(@Valid @RequestBody Quiz quiz) {
         Quiz savedQuiz = quizService.saveQuiz(quiz);
+        QuizEvent quizEvent = new QuizEvent();
+        quizEvent.setMessage("New Quiz is created with quiz id " + savedQuiz.getQuizId());
+        quizEvent.setQuizId(savedQuiz.getQuizId());
+        quizEvent.setStatus("NEW");
+        producer.sendEvent(quizEvent);
         return new ResponseEntity<>(savedQuiz, HttpStatus.CREATED);
     }
 

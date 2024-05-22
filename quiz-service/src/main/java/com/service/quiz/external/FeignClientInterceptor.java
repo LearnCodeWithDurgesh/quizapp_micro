@@ -22,7 +22,7 @@ public class FeignClientInterceptor implements RequestInterceptor {
 
 
     @Autowired
-    OAuth2AuthorizedClientManager manager;
+    public OAuth2AuthorizedClientManager manager;
 
     @Override
     public void apply(RequestTemplate requestTemplate) {

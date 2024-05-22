@@ -13,8 +13,11 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
-        httpSecurity.authorizeHttpRequests(server->server.anyRequest().authenticated());
-        httpSecurity.oauth2ResourceServer(oauth->oauth.jwt(Customizer.withDefaults()));
+        httpSecurity.authorizeHttpRequests(server -> {
+            server.requestMatchers("/h2-console/**").permitAll();
+            server.requestMatchers("/api/**").authenticated();
+        });
+        httpSecurity.oauth2ResourceServer(oauth -> oauth.jwt(Customizer.withDefaults()));
         return httpSecurity.build();
     }
 }
