@@ -17,7 +17,13 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
-        httpSecurity.authorizeHttpRequests(requestMatcherRegistry -> requestMatcherRegistry.anyRequest().authenticated());
+        httpSecurity.authorizeHttpRequests(
+                requestMatcherRegistry ->
+                {
+//                    requestMatcherRegistry.requestMatchers("/graphiql").permitAll();
+//                    requestMatcherRegistry.requestMatchers("/graphql").permitAll();
+                    requestMatcherRegistry.anyRequest().authenticated();
+                });
         httpSecurity.oauth2ResourceServer(server -> server.jwt(Customizer.withDefaults()));
         return httpSecurity.build();
     }
@@ -29,13 +35,9 @@ public class SecurityConfig {
 
 
     @Bean
-    public NewTopic topic()
-    {
+    public NewTopic topic() {
         return TopicBuilder.name(topicName).build();
     }
-
-
-
 
 
 }

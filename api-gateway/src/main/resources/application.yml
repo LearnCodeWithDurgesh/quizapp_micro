@@ -12,7 +12,8 @@ spring:
         - id: QUIZ-SERVICE
           uri: lb://QUIZ-SERVICE
           predicates:
-            - Path=/api/quizzes/**
+            - Path=/api/quizzes/**,/graphql
+
         - id: QUESTIONS-SERVICE
           uri: lb://QUESTIONS-SERVICE
           predicates:

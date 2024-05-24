@@ -28,7 +28,8 @@ public class KafkaConsumer {
             groupId = "${spring.kafka.consumer.group-id}"
 
     )
-    public void consume(QuizEvent event) {
+    public void consume(QuizEvent event)
+    {
 
         logger.info("Consuming event {} ", event.toString());
 

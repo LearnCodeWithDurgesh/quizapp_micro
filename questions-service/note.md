@@ -24,6 +24,11 @@ client secret
 urls
 
 
+Kafka:
+
+docker run -p 9092:9092 apache/kafka:3.7.0
+
+
 
 
 to create token:

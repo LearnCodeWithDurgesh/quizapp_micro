@@ -1,0 +1,28 @@
+type Quiz{
+    quizId:ID,
+    quizTitle:String,
+    quizDescription:String,
+    maxMarks:String,
+    duration:String,
+    questions:String
+
+}
+
+type Query{
+
+
+    getQuiz(quizId:ID):Quiz,
+    getQuizzes:[Quiz]
+}
+
+type Mutation{
+    createQuiz(
+        quizTitle:String,
+        quizDescription:String,
+        maxMarks:String,
+        duration:String,
+        question:String
+    ):Quiz
+
+    deleteQuiz(quizId:ID):Boolean
+}
