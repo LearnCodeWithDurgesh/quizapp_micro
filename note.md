@@ -1,10 +1,12 @@
+### Some important architecture flow:
+
 https://excalidraw.com/#json=U0va-_IQ9juz_71XfX-s_,pnusQ3ix-MQxcYYm0vMnCA
 
 ## Download docker:
 
 ### docker -v
 
-TO RUN ZIPKIN SERVER USING DOCKER:
+### TO RUN ZIPKIN SERVER USING DOCKER:
 
 docker run -d -p 9411:9411 openzipkin/zipkin
 
